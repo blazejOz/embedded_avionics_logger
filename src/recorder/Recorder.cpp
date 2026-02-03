@@ -1,33 +1,13 @@
 #include "Recorder.h"
 
 
-// HARDWARE SETUP
-
-spi_t spi_bus = {
-    .hw_inst = spi0,
-    .miso_gpio = 16, // DO
-    .mosi_gpio = 19, // DI
-    .sck_gpio = 18,  // SCLK
-    .baud_rate = 12 * 1000 * 1000, 
-    .set_drive_strength = true,
-    .mosi_gpio_drive_strength = GPIO_DRIVE_STRENGTH_12MA,
-    .sck_gpio_drive_strength = GPIO_DRIVE_STRENGTH_12MA
-};
-
-sd_spi_if_t spi_if = {
-    .spi = &spi_bus,
-    .ss_gpio = 17    // CS
-};
-
-sd_card_t sd_card_config = {
-    .type = SD_IF_SPI,
-    .spi_if_p = &spi_if,
-    .use_card_detect = false // Ignore the Card Detect pin
-};
+// GLOBAL STRUCTURES (Required by the no-osFatFS library)
+static spi_t _spi_bus = {}; 
+static sd_spi_if_t _spi_if = {};
+static sd_card_t _sd_card_config = {};
 
 // "GLUE" CODE 
 // NEEDED TO WORK WITH no-osFatFS lib
-
 namespace FatFsNs {
     std::vector<SdCard> FatFs::SdCards;
 }
@@ -35,8 +15,7 @@ namespace FatFsNs {
 extern "C" {
     size_t sd_get_num() { return 1; }
     sd_card_t *sd_get_by_num(size_t num) {
-        extern sd_card_t sd_card_config; 
-        if (num == 0) return &sd_card_config;
+        if (num == 0) return &_sd_card_config;
         return nullptr;
     }
 }
@@ -44,20 +23,31 @@ extern "C" {
 
 // CLASS LOGIC
 
-Recorder::Recorder()
-{
-    printf("\n--- RECORDER  INITIALIZED ---\n");
-    init_sd();
-}
+Recorder::Recorder(spi_inst_t* spi_port, uint miso, uint mosi, uint sck, uint cs) {
+    // Fill in the global config structures with the values passed by the user
+    _spi_bus.hw_inst = spi_port;
+    _spi_bus.miso_gpio = miso;
+    _spi_bus.mosi_gpio = mosi;
+    _spi_bus.sck_gpio = sck;
+    _spi_bus.baud_rate = 12 * 1000 * 1000;
+    
+    // Default drive strengths
+    _spi_bus.set_drive_strength = true;
+    _spi_bus.mosi_gpio_drive_strength = GPIO_DRIVE_STRENGTH_12MA;
+    _spi_bus.sck_gpio_drive_strength = GPIO_DRIVE_STRENGTH_12MA;
 
-int Recorder::init_sd()
-{
-    // Initialize the driver
+    _spi_if.spi = &_spi_bus;
+    _spi_if.ss_gpio = cs;
+
+    _sd_card_config.type = SD_IF_SPI;
+    _sd_card_config.spi_if_p = &_spi_if;
+    _sd_card_config.use_card_detect = false;
+
+    printf("\n--- RECORDER HARDWARE CONFIGURED ---\n");
+    
+    // Now actually initialize the driver
     sd_init_driver(); 
-
-    // Add the card to the system
-    this->card_p = FatFsNs::FatFs::add_sd_card(&sd_card_config);
-    return 0;
+    this->card_p = FatFsNs::FatFs::add_sd_card(&_sd_card_config);
 }
 
 void Recorder::start_recording() 

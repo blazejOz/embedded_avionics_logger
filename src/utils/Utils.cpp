@@ -37,8 +37,10 @@ namespace Utils
     void handle_error(const char* msg)
     {
         turnOff_green();
+
+        printf("ERROR: %s\n", msg);
+
         while(true){
-            std::cout << msg << '\n';
             gpio_put(RED_LED_PIN, 1);  
             sleep_ms(500);
             gpio_put(RED_LED_PIN, 0);  
@@ -60,7 +62,7 @@ namespace Utils
                 hold_time += 100;
 
                 if(hold_time >= 1500) {
-                    std::cout << "button clicked" << std::endl;
+                    printf("button clicked");
                     while(gpio_get(START_BTN_PIN) == 0) sleep_ms(10);
                     return true;
                 }

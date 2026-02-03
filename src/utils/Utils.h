@@ -3,9 +3,12 @@
 #include "pico/stdlib.h"
 
 namespace Utils {
-    // Just the declarations go here!
     
-    void init_hardware();
+    void init(
+        uint START_BTN_PIN, 
+        uint GREEN_LED_PIN,
+        uint RED_LED_PIN
+    );
     void turnOn_green();
     void turnOff_green();
     void handle_error(const char* msg);

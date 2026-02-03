@@ -4,33 +4,33 @@
 #include "imu/MPU6050.h"
 #include "recorder/Recorder.h"
 #include "utils/Utils.h"
+#include "pinout.h"
 
 int main() {
     stdio_init_all();
     sleep_ms(3000); 
     
-    Utils::init_hardware();
-    Recorder recorder;
+    
+    Utils::init(START_BTN_PIN, GREEN_LED_PIN, RED_LED_PIN);
+    MPU6050 mpu(MPU_I2C_PORT, MPU_SDA_PIN, MPU_SCL_PIN); 
+    Recorder recorder(SD_SPI_PORT, SD_MISO_PIN, SD_MOSI_PIN, SD_SCK_PIN, SD_CS_PIN);
 
     while(true){
         if(Utils::is_button_clicked()){
             Utils::turnOn_green();
             recorder.start_recording();
-            std::cout << "\n--- Starting Flight Recorder ---\n" << std::endl;
+            printf("\n--- Starting Flight Recorder ---\n");
             break;
         }
         sleep_ms(50);
     }
 
-    MPU6050 mpu(i2c0, 4, 5); 
     Gyro_t current_gyro;
-
-
     while(true) {
         if(Utils::is_button_clicked()){
             Utils::turnOff_green();
             recorder.stop_recording();
-            std::cout << "\n--- Stoping Flight Recorder ---\n" << std::endl;
+            printf("\n--- Stoping Flight Recorder ---\n");
             break;
         }
 

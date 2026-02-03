@@ -11,7 +11,7 @@
 
 class Recorder {
 public:
-    Recorder();
+    Recorder(spi_inst_t* spi_port, uint miso, uint mosi, uint sck, uint cs);
     FatFsNs::SdCard* card_p = nullptr;
 
     void start_recording();
@@ -21,6 +21,5 @@ public:
 private:
     FatFsNs::File file; 
     bool is_open = false;
-    int init_sd();
 
 };
