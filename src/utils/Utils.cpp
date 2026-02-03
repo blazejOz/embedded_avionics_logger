@@ -1,19 +1,19 @@
 #include "Utils.h"
+#include "../pinout.h"
 #include <iostream>
-
-#define RED_LED_PIN 15
-#define GREEN_LED_PIN 14
-#define BTN_PIN 13
 
 
 namespace Utils
 {
-    void init_hardware()
+    void init(
+        uint START_BTN_PIN, 
+        uint GREEN_LED_PIN,
+        uint RED_LED_PIN)
     {
         // Setup Button
-        gpio_init(BTN_PIN);
-        gpio_set_dir(BTN_PIN, GPIO_IN);
-        gpio_pull_up(BTN_PIN);
+        gpio_init(START_BTN_PIN);
+        gpio_set_dir(START_BTN_PIN, GPIO_IN);
+        gpio_pull_up(START_BTN_PIN);
 
         // Setup LEDs
         gpio_init(GREEN_LED_PIN);
@@ -48,20 +48,20 @@ namespace Utils
 
     bool is_button_clicked()
     {
-        if (gpio_get(BTN_PIN) == 0) {
+        if (gpio_get(START_BTN_PIN) == 0) {
             // Debounce
             sleep_ms(50);
-            if (gpio_get(BTN_PIN) != 0) return false;
+            if (gpio_get(START_BTN_PIN) != 0) return false;
 
             uint32_t hold_time = 0;
 
-            while(gpio_get(BTN_PIN) == 0){
+            while(gpio_get(START_BTN_PIN) == 0){
                 sleep_ms(100);
                 hold_time += 100;
 
                 if(hold_time >= 1500) {
                     std::cout << "button clicked" << std::endl;
-                    while(gpio_get(BTN_PIN) == 0) sleep_ms(10);
+                    while(gpio_get(START_BTN_PIN) == 0) sleep_ms(10);
                     return true;
                 }
             }
