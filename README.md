@@ -1,7 +1,9 @@
 # Embedded_Flight_Data_Recorder
+[![CI](https://github.com/blazejOz/Embedded_Flight_Data_Recorder/actions/workflows/build.yaml/badge.svg)](https://github.com/blazejOz/Embedded_Flight_Data_Recorder/actions)
+
 Embedded Flight Data Recorder (C++ / RP2350)
 
-A  flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2 W (RP2350). This project captures real-time motion data from an MPU6050 IMU and logs it to an SD card using a custom C++ wrapper around the FatFs filesystem provided by carlk3 (https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
+A  flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2(RP2350). This project captures real-time motion data from an MPU6050 IMU and logs it to an SD card using a custom C++ wrapper around the FatFs filesystem provided by carlk3 (https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
 
 ![Recorder Demo](assets/demo.gif)
 
