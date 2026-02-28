@@ -29,7 +29,7 @@ jobs:
     - name: Configure CMake
       env:
         PICO_SDK_PATH: ${{ github.workspace }}/pico-sdk
-      run: cmake -B build -DPICO_BOARD=pico 
+      run: cmake -B build
 
     - name: Build project
       run: cmake --build build
