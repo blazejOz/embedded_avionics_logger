@@ -15,7 +15,7 @@ public:
     FatFsNs::SdCard* card_p = nullptr;
 
     void start_recording();
-    void log_data(const Gyro_t& gyro, const Accel_t& accel);
+    void log_data(uint32_t timestamp, const Gyro_t& gyro, const Accel_t& accel);
     void stop_recording();
 
 private:
