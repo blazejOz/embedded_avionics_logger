@@ -17,6 +17,10 @@
 #define	REG_GYRO_YOUT_H		0x45
 #define	REG_GYRO_ZOUT_H		0x47
 
+#define	REG_ACCEL_XOUT_H		0x3B
+#define	REG_ACCEL_YOUT_H		0x3D
+#define	REG_ACCEL_ZOUT_H		0x3F
+
 // MPU6050 ID 
 #define WHO_AM_I_VALUE      0x68
 
@@ -27,10 +31,16 @@
 */
 
 typedef struct{
-    int16_t gyro_x;
-    int16_t gyro_y;
-    int16_t gyro_z;    
+    int16_t x;
+    int16_t y;
+    int16_t z;    
 } Gyro_t;
+
+typedef struct{
+    int16_t x;
+    int16_t y;
+    int16_t z;    
+} Accel_t;
 
 class MPU6050 
 {
@@ -47,5 +57,5 @@ public:
     MPU6050(i2c_inst_t* i2c, uint8_t sca, uint8_t scl);
 
     void getGyro(Gyro_t *gyro);
-
+    void getAccel(Accel_t *accel);
 };

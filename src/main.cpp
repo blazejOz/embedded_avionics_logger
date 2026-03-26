@@ -25,6 +25,7 @@ int main() {
     }
 
     Gyro_t current_gyro;
+    Accel_t current_accel;
     while(true) {
         if(Utils::is_button_clicked()){
             Utils::turnOff_green();
@@ -34,9 +35,10 @@ int main() {
         }
 
         mpu.getGyro(&current_gyro);
-        recorder.log_data(current_gyro);
+        mpu.getAccel(&current_accel);
+        recorder.log_data(current_gyro, current_accel);
 
-        printf("Logged: X:%d Y:%d Z:%d\n", current_gyro.gyro_x, current_gyro.gyro_y, current_gyro.gyro_z);
+        printf("Logged: Gyro X:%d Y:%d Z:%d Accel X:%d Y:%d Z:%d \n", current_gyro.x, current_gyro.y, current_gyro.z , current_accel.x, current_accel.y, current_accel.z) ;
 
         sleep_ms(50); 
     }

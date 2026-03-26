@@ -61,12 +61,12 @@ void Recorder::start_recording()
     Utils::handle_error("SD Open Failed");
 }
 
-void Recorder::log_data(const Gyro_t& data) 
+void Recorder::log_data(const Gyro_t& gyro, const Accel_t& accel) 
 {
     if(!is_open) return;
 
     char buffer[64];
-    sprintf(buffer, "%d, %d, %d\n", data.gyro_x, data.gyro_y, data.gyro_z);
+    sprintf(buffer, "G: %d, %d, %d A: %d, %d, %d\n", gyro.x, gyro.y, gyro.z, accel.x, accel.y, accel.z);
     file.puts(buffer);
     file.sync();
 }

@@ -59,7 +59,21 @@ void MPU6050::getGyro(Gyro_t *gyro)
 
     i2c_read_blocking(this->i2c, MPU6050_ADDR, buffer, 6, false);
 
-    gyro->gyro_x = (buffer[0] << 8) | buffer[1];
-    gyro->gyro_y = (buffer[2] << 8) | buffer[3];
-    gyro->gyro_z = (buffer[4] << 8) | buffer[5];
+    gyro->x = (buffer[0] << 8) | buffer[1];
+    gyro->y = (buffer[2] << 8) | buffer[3];
+    gyro->z = (buffer[4] << 8) | buffer[5];
+}
+
+void MPU6050::getAccel(Accel_t *accel)
+{
+    uint8_t reg = REG_ACCEL_XOUT_H; 
+    uint8_t buffer[6]; // 6 bytes: 2 for each: X/Y/Z axis
+
+    i2c_write_blocking(this->i2c, MPU6050_ADDR, &reg, 1, true);
+
+    i2c_read_blocking(this->i2c, MPU6050_ADDR, buffer, 6, false);
+
+    accel->x = (buffer[0] << 8) | buffer[1];
+    accel->y = (buffer[2] << 8) | buffer[3];
+    accel->z = (buffer[4] << 8) | buffer[5];
 }
