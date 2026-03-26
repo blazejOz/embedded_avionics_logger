@@ -53,20 +53,40 @@ Recorder::Recorder(spi_inst_t* spi_port, uint miso, uint mosi, uint sck, uint cs
 void Recorder::start_recording() 
 {
     this->card_p->mount();
-    FRESULT fr = file.open("0:flight_data.csv", FA_WRITE | FA_OPEN_APPEND);
+
+    char filename[20];
+    int file_idx = 0;
+    FRESULT fr;
+
+    // Loop until we find a filename that DOES NOT exist
+    while (true) {
+        sprintf(filename, "flight_%03d.csv", file_idx);
+        FILINFO fno;
+        fr = f_stat(filename, &fno); 
+        
+        if (fr == FR_NO_FILE) {
+            // This name is free
+            break; 
+        }
+        file_idx++;
+    }
+
+    fr = file.open(filename, FA_WRITE | FA_OPEN_APPEND);
     if (fr == FR_OK) {
         is_open = true;
+        file.puts("Timestamp_ms,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ\n");
+        file.sync();
         return;
     }
     Utils::handle_error("SD Open Failed");
 }
 
-void Recorder::log_data(const Gyro_t& gyro, const Accel_t& accel) 
+void Recorder::log_data(uint32_t timestamp, const Gyro_t& gyro, const Accel_t& accel) 
 {
     if(!is_open) return;
 
     char buffer[64];
-    sprintf(buffer, "G: %d, %d, %d A: %d, %d, %d\n", gyro.x, gyro.y, gyro.z, accel.x, accel.y, accel.z);
+    sprintf(buffer, "%lu, %d, %d, %d, %d, %d, %d\n", timestamp, gyro.x, gyro.y, gyro.z, accel.x, accel.y, accel.z);
     file.puts(buffer);
     file.sync();
 }

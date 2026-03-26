@@ -24,8 +24,10 @@ int main() {
         sleep_ms(50);
     }
 
-    Gyro_t current_gyro;
-    Accel_t current_accel;
+    Gyro_t g;
+    Accel_t a;
+    uint32_t timestamp;
+
     while(true) {
         if(Utils::is_button_clicked()){
             Utils::turnOff_green();
@@ -33,12 +35,12 @@ int main() {
             printf("\n--- Stoping Flight Recorder ---\n");
             break;
         }
+        timestamp = to_ms_since_boot(get_absolute_time());
+        mpu.getGyro(&g);
+        mpu.getAccel(&a);
+        recorder.log_data(timestamp, g, a);
 
-        mpu.getGyro(&current_gyro);
-        mpu.getAccel(&current_accel);
-        recorder.log_data(current_gyro, current_accel);
-
-        printf("Logged: Gyro X:%d Y:%d Z:%d Accel X:%d Y:%d Z:%d \n", current_gyro.x, current_gyro.y, current_gyro.z , current_accel.x, current_accel.y, current_accel.z) ;
+        printf("Logged: %d Gyro X:%d Y:%d Z:%d Accel X:%d Y:%d Z:%d \n", timestamp, g.x, g.y, g.z , a.x, a.y, a.z) ;
 
         sleep_ms(50); 
     }

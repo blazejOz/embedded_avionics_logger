@@ -3,7 +3,7 @@
 
 Embedded Avionics Data Logger (C++ / RP2350)
 
-A  flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2(RP2350). This project captures real-time motion data from an MPU6050 IMU and logs it to an SD card using a custom C++ wrapper around the FatFs filesystem provided by carlk3 (https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
+A flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2(RP2350). This project captures real-time motion data from an MPU6050 IMU and logs it to an SD card using a custom C++ wrapper around the FatFs filesystem provided by carlk3 (https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
 
 ![Recorder Demo](assets/demo.gif)
 
@@ -64,5 +64,5 @@ cmake --build build
 - [x] **Gyroscope Data Capture** (X/Y/Z)
 - [x] **Add Accelerometer Data:** Expand MPU6050 driver to capture acceleration.
 - [ ] **Error Codes:** Instead of just one LED, use different blink patterns.
-- [ ] **Timestamps:** Add millisecond precision timestamps to the log.
-- [ ] **FreeRTOS:** RTRefactor the codebase into prioritized Tasks (Sensing vs. Logging) using FreeRTOS to prevent SD card latency.
+- [x] **Timestamps:** Add millisecond precision timestamps to the log.
+- [ ] **FreeRTOS:** Refactor the codebase into prioritized Tasks (Sensing vs. Logging) using FreeRTOS to prevent SD card latency.
