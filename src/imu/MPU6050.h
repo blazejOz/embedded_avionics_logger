@@ -57,5 +57,5 @@ public:
     MPU6050(i2c_inst_t* i2c, uint8_t sca, uint8_t scl);
 
     void getGyro(Gyro_t *gyro);
-
+    void getAccel(Accel_t *accel);
 };
