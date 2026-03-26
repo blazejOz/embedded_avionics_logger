@@ -1,7 +1,7 @@
-# Embedded_Flight_Data_Recorder
-[![CI](https://github.com/blazejOz/Embedded_Flight_Data_Recorder/actions/workflows/build.yaml/badge.svg)](https://github.com/blazejOz/Embedded_Flight_Data_Recorder/actions)
+# embedded_avionics_logger
+[![CI](https://github.com/blazejOz/embedded_avionics_logger/actions/workflows/build.yml/badge.svg)](https://github.com/blazejOz/embedded_avionics_logger/actions)
 
-Embedded Flight Data Recorder (C++ / RP2350)
+Embedded Avionics Data Logger (C++ / RP2350)
 
 A  flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2(RP2350). This project captures real-time motion data from an MPU6050 IMU and logs it to an SD card using a custom C++ wrapper around the FatFs filesystem provided by carlk3 (https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
 
@@ -9,7 +9,7 @@ A  flight data recorder(aka "Black Box") built for the Raspberry Pi Pico 2(RP235
 
 ## Hardware Architecture
 
-* **Microcontroller:** Raspberry Pi Pico 2 W
+* **Microcontroller:** Raspberry Pi Pico 2
 * **Sensor:** MPU6050 (6-axis Gyroscope & Accelerometer)
 * **Storage:** MicroSD Card Module (SPI Mode)
 * **Interface:** Tactile Button & Status LEDs
@@ -53,10 +53,8 @@ Built using the standard Raspberry Pi Pico SDK and CMake
 For Nixos users use flake - nix develop
 
 ```bash
-mkdir build
-cd build
-cmake .. 
-make
+cmake -B build
+cmake --build build
 ```
 
 ## Roadmap / Todo
@@ -64,6 +62,7 @@ make
 - [x] **Basic SD Card Logging** (CSV format)
 - [x] **Manual Start/Stop Control** (Button + LED feedback)
 - [x] **Gyroscope Data Capture** (X/Y/Z)
-- [ ] **Add Accelerometer Data:** Expand MPU6050 driver to capture acceleration.
+- [x] **Add Accelerometer Data:** Expand MPU6050 driver to capture acceleration.
+- [ ] **Error Codes:** Instead of just one LED, use different blink patterns.
 - [ ] **Timestamps:** Add millisecond precision timestamps to the log.
-- [ ] **Dual Buffer:** Optimize write speeds to prevent data loss at high sample rates.
+- [ ] **FreeRTOS:** RTRefactor the codebase into prioritized Tasks (Sensing vs. Logging) using FreeRTOS to prevent SD card latency.
